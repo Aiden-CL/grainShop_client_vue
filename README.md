@@ -52,16 +52,16 @@ import App from '@/App'
 ```
 ### git基本操作
 
-创建本地仓库(有三个区)
+创建本地仓库(有三个区) `git init`
 
-创建远程仓库
+创建远程仓库 `new repository`
 
-将本地仓库和远程仓库关联起来
+将本地仓库和远程仓库关联起来 `git remote add origin git@github.com:Aiden-CL/grainShop_client_vue.git`
 
-在本地库代码有更新推送(push)到远程仓库
+在本地库代码有更新推送(push)到远程仓库 `git add .`+`git commit -m"commentByYourself"`+`git push -u origin master`
 
-远程仓库代码有更新拉取(pull)到本地仓库
+远程仓库代码有更新拉取(pull)到本地仓库 `git pull`
 
-如果先有远程仓库需git clone
+如果先有远程仓库需 `git clone "address" [filename]`
 
 
