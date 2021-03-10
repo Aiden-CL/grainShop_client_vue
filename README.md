@@ -52,7 +52,7 @@ import App from '@/App'
 ```
 ### git基本操作
 
-创建本地仓库(有三个区) `git init`
+创建本地仓库(工作区 暂存区 仓库区) `git init`
 
 创建远程仓库 `new repository`
 
