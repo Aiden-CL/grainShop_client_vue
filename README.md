@@ -62,4 +62,6 @@ import App from '@/App'
 
 远程仓库代码有更新拉取(pull)到本地仓库
 
+如果先有远程仓库需git clone
+
 
