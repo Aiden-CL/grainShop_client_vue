@@ -46,7 +46,9 @@
           </h1>
           <div class="searchArea">
               <form action="###" class="searchForm">
-                  <input type="text" id="autocomplete" class="input-error input-xxlarge" />
+                  <input type="text" id="autocomplete" class="input-error input-xxlarge" 
+                    v-model="keyword"
+                  />
                   <button class="sui-btn btn-xlarge btn-danger" type="button" @click="toSearch">搜索</button>
               </form>
           </div>
@@ -57,10 +59,53 @@
 <script>
 export default {
     name:'Header',
+    data(){
+        return {
+            keyword:''
+        }
+    },
     methods:{
       //编程式导航
       toSearch(){
-        this.$router.push('/search')
+          //push()里写的和声明式导航是一样的 路由跳转可以携带的两种参数 params和query
+          //params参数是属于路径的一部分 直接写在路径当中 匹配路由的时候是要匹配这个parama参数
+          //query参数不属于路径的一部分 拼接在路径的后面 以?分割后面的key=value&key=value 匹配路由的时候不匹配query参数
+
+          //路径传参的三种写法：
+          //1. 字符串拼接
+        //this.$router.push('/search/'+this.keyword+'?keyword1='+this.keyword.toUpperCase())
+        //2. 模板字符串
+        //this.$router.push(`/search/${this.keyword}?keyword1=${this.keyword.toUpperCase()}`)
+        //3. 对象
+        // this.$router.push({
+        //     name:'search',
+        //     params:{
+        //         keyword:this.keyword
+        //     },//点击搜索按钮只传params参数
+        //     // query:{
+        //     //     keyword1:this.keyword.toUpperCase()
+        //     // }
+        // })
+        //.catch(()=>{})
+        //NavigationDuplicated: Avoided redundant navigation to current location: "/search/aac?keyword1=AAC".
+        //错误原因：vue-router3.1.0以上的版本需要指定成功或者失败的回调处理引入的promise 如果没有传递
+        //那么就返回一个promise  内部会判断跳转的路径和参数有没有变 会抛出一个失败的promise
+        //解决方法1.调用push时传递成功和失败的回调给内部 让promise可以正常处理
+        //可以只传成功的回调函数 可以只传失败的回调去处理
+
+        //this.$router路由器对象 .push()是路由器构造函数原型上的方法
+
+        let location = {
+            name:'search',
+            params:{
+                keyword:this.keyword||undefined
+            },
+        }
+        //跳转之前 看看之前有没有给带query的参数过来 如果有 带上
+        if(this.$route.query){
+            location.query = this.$route.query
+        }
+        this.$router.push(location)
       }
     }
 }
