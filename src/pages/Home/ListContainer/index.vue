@@ -3,30 +3,9 @@
         <div class="list-container">
             <div class="sortList clearfix">
                 <div class="center">
-                    <!--banner轮播-->
-                    <div class="swiper-container" id="mySwiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img src="./images/banner1.jpg" />
-                            </div>
-                            <!-- <div class="swiper-slide">
-                                <img src="./images/banner2.jpg" />
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="./images/banner3.jpg" />
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="./images/banner4.jpg" />
-                            </div> -->
-                        </div>
-                        <!-- 如果需要分页器 -->
-                        <div class="swiper-pagination"></div>
-
-                        <!-- 如果需要导航按钮 -->
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                    </div>
+                    <SliderLoop :bannerList="bannerList" :refName="'bannerContainer'"></SliderLoop>
                 </div>
+
                 <div class="right">
                     <div class="news">
                         <h4>
@@ -111,8 +90,90 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+//import Swiper from 'swiper/js/swiper'
+//import 'swiper/css/swiper.css'
 export default {
-    name:'ListContainer'
+    name:'ListContainer',
+    
+    mounted(){
+        this.getBannerList();
+        //new Swiper时 数据还未拿到 过早
+        //当挂载完成后 就去实例化swiper对象不行 必须在结构完全形成之后才有效果
+        //因为实例化时数据还未请求回来 导致结构不能够形成
+        //最简单的处理方式：可以给实例化swiper对象添加延迟定时器 虽然可以解决 但是用户体验不好
+
+        //方法一：
+        // setTimeout(() => {
+        //     //1. swiper的跟容器 2. 配置对象
+        //     new Swiper ('.swiper-container', {
+        //     //direction: 'vertical', // 垂直切换选项 默认水平
+        //     loop: true, // 循环模式选项
+            
+        //     // 如果需要分页器
+        //     pagination: {
+        //         el: '.swiper-pagination',
+        //     },
+            
+        //     // 如果需要前进后退按钮
+        //     navigation: {
+        //         nextEl: '.swiper-button-next',
+        //         prevEl: '.swiper-button-prev',
+        //     },
+            
+        //     // 如果需要滚动条
+        //     scrollbar: {
+        //         el: '.swiper-scrollbar',
+        //     },
+        // })  
+        // }, 2000);   
+    },
+    methods:{
+        //拿数据是异步的
+        getBannerList(){
+            this.$store.dispatch('getBannerList')
+        }
+    },
+    computed:{
+        ...mapState({
+            bannerList:state=>state.home.bannerList
+        })
+    },
+
+    //data props传递过来的 computed计算出的 都可以使用
+    // watch:{
+    //     //请求回来之前是最外层数组是空的 请求回来数组内是有值的 由空->有 不需要深度监视
+    //     //数组从0变4
+    //     bannerList:{
+    //         immediate:true,//立即执行无意义 和floor内部轮播代码保持一致
+    //         //数据回来 结构不一定形成
+    //         handler(newVal,oldVal){
+    //             //监视bannerList内的数据是不是请求回来了
+    //             //直接new不行 虽然把数据拿回来了 但是上面的结构是通过v-for遍历数据动态创建div结构 也需要时间
+
+    //             //通常用在当数据更新后需要做一些操作 而这些操作有需要等待页面更新完成才有效 此时需要使用nextTick
+    //             this.$nextTick(()=>{
+    //                 //等待页面最近一次更新完成之后自动调用
+    //                 new Swiper (this.$refs.bannerContainer, {
+    //                     loop: true,
+    //                     pagination: {
+    //                         el: '.swiper-pagination',
+    //                     },
+    //                     navigation: {
+    //                         nextEl: '.swiper-button-next',
+    //                         prevEl: '.swiper-button-prev',
+    //                     },
+    //                     scrollbar: {
+    //                         el: '.swiper-scrollbar',
+    //                     },
+    //                 }) 
+    //                 //放在updated(){}里 只要页面更新 就new 效率低
+    //             })
+                 
+
+    //         }
+    //     }
+    // }
 }
 </script>
 

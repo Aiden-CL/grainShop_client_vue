@@ -1,12 +1,20 @@
-import { reqCategoryList } from '@/api'
+import { reqCategoryList ,reqBannerList,reqFloorList} from '@/api'
 const state = {
     //初始化状态数据
-    categoryList: []
+    categoryList: [],
+    bannerList: [],
+    floorList:[]
 }
 //同步修改数据
 const mutations = {
     RECEIVE_CATEGORYLIST(state, categoryList) {
         state.categoryList = categoryList
+    },
+    RECEIVE_BANNERLIST(state, bannerList) {
+        state.bannerList = bannerList
+    },
+    RECEIVE_FLOORLIST(state, floorList) {
+        state.floorList = floorList
     }
 }
 //异步发请求 1. 发请求 2. vue和vuex的桥梁
@@ -18,8 +26,20 @@ const actions = {
         if (result.code === 200) {
             commit('RECEIVE_CATEGORYLIST',result.data)
         }
-
-    }
+    },
+    //action函数的第一个参数必须是commit(store对象)
+    async getBannerList({commit}) {
+        const result = await reqBannerList()
+        if (result.code === 200) {
+            commit('RECEIVE_BANNERLIST',result.data)
+        }
+    },
+    async getFloorList({commit}) {
+        const result = await reqFloorList()
+        if (result.code === 200) {
+            commit('RECEIVE_FLOORLIST',result.data)
+        }
+    },
 }
 const getters = {
 

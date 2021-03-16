@@ -4,6 +4,7 @@
 
 
 import Ajax from './ajax'
+import mockAjax from './mockAjax'
 //请求获取三级分类列表数据 GET
 export const reqCategoryList = () => {
     //axios中请求的参数一共有几种: params,query,body
@@ -12,6 +13,20 @@ export const reqCategoryList = () => {
     //注意请求参数
     return Ajax({
         url: '/product/getBaseCategoryList',
+        method:'get'
+    })
+}
+//请求获取模拟的banner数据 默认get请求
+export const reqBannerList = () => {
+    return mockAjax({
+        url: '/banner',
+        method:'get'
+    })
+}
+
+export const reqFloorList = () => {
+    return mockAjax({
+        url: '/floor',
         method:'get'
     })
 }

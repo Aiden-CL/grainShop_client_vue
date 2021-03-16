@@ -117,5 +117,9 @@ Header和Footer
 //默认值都是true
 ```
 
+#### mock
+
+生成随机数据 拦截ajax请求 将请求转发到本地
+
 
 
