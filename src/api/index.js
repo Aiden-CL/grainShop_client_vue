@@ -30,3 +30,14 @@ export const reqFloorList = () => {
         method:'get'
     })
 }
+
+//请求获取search商品列表数据
+// /api/list 请求方式post 返回的是对象{}
+export const reqGoodsListInfo=(searchParams)=>{
+    return Ajax({
+        url:'/list',
+        method:'post',
+        data:searchParams
+    })
+}
+//reqGoodsListInfo({})//不能不传 需要传一个空对象 后期需要初始化参数

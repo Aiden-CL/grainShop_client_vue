@@ -20,7 +20,7 @@
                         <div class="floor-1">
                             <div class="blockgary">
                                 <ul class="jd-list">
-                                    <li  v-for="(keyword,index) in floor.keywords" :key="index"
+                                    <li v-for="(keyword,index) in floor.keywords" :key="index"
                                     >{{keyword}}</li>               
                                 </ul>
                                 <img :src="floor.imgUrl" />
@@ -106,28 +106,28 @@ export default {
         //     },
         // }) 
     },
-    watch:{
-        floor:{
-            immediate:true,//不管数据有没有变化都立即执行handler
-            handler(newVal,oldVal){
-                this.$nextTick(()=>{
-                    new Swiper (this.$refs.floor1Swiper, {
-                        loop: true,
-                        pagination: {
-                            el: '.swiper-pagination',
-                        },
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                        scrollbar: {
-                            el: '.swiper-scrollbar',
-                        },
-                    }) 
-                })
-            }
-        }
-    }
+    // watch:{
+    //     floor:{
+    //         immediate:true,//不管数据有没有变化都立即执行handler
+    //         handler(newVal,oldVal){
+    //             this.$nextTick(()=>{
+    //                 new Swiper (this.$refs.floor1Swiper, {
+    //                     loop: true,
+    //                     pagination: {
+    //                         el: '.swiper-pagination',
+    //                     },
+    //                     navigation: {
+    //                         nextEl: '.swiper-button-next',
+    //                         prevEl: '.swiper-button-prev',
+    //                     },
+    //                     scrollbar: {
+    //                         el: '.swiper-scrollbar',
+    //                     },
+    //                 }) 
+    //             })
+    //         }
+    //     }
+    // }
 }
 </script>
 

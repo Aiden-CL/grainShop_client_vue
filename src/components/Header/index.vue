@@ -64,6 +64,9 @@ export default {
             keyword:''
         }
     },
+    mounted(){
+        this.$bus.$on('clearKeyword',this.clearKeyword)
+    },
     methods:{
       //编程式导航
       toSearch(){
@@ -106,6 +109,9 @@ export default {
             location.query = this.$route.query
         }
         this.$router.push(location)
+      },
+      clearKeyword(){
+          this.keyword = ''
       }
     }
 }

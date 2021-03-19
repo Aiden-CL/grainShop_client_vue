@@ -30,6 +30,8 @@ const actions = {
     //action函数的第一个参数必须是commit(store对象)
     async getBannerList({commit}) {
         const result = await reqBannerList()
+        //201请求成功但没有数据 参数失败
+        //200判断数据是否正确的标志
         if (result.code === 200) {
             commit('RECEIVE_BANNERLIST',result.data)
         }
@@ -41,9 +43,7 @@ const actions = {
         }
     },
 }
-const getters = {
-
-}
+const getters = {}
 export default {
     state,
     mutations,

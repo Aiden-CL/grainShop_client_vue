@@ -1,5 +1,4 @@
 <template>
-  
     <div class="swiper-container" :ref="refName">
         <div class="swiper-wrapper">
             <div class="swiper-slide" 
@@ -15,8 +14,6 @@
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
     </div>
-    
-  
 </template>
 
 <script>

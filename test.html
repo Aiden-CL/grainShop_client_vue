@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    //把数组中的对象解析成字符串的方法用的是JSON.stringify()方法
+
+        var arr1 = [123, { a: 1 }, { a: { b: 1 } }, { a: "1" }, { a: { b: 1 } }, "meili"];
+        var arr2 = [123, "meili", "123", "mogu", 123];
+        var arr3 = [123, [1, 2, 3], [1, "2", 3], [1, 2, 3], "meili"];
+
+        // function unique(arr) {
+        //     var b = arr.map(item => {
+        //         return JSON.stringify(item);//JSON.stringify(item)是把数组中的对象解析成字符串再比较
+        //     })
+        //     var c = Array.from(new Set(b));//Set(b)用来对b去重，但是去重后的结果不是我们想要的数组的形式，所以需要用 Array.from()的方法变成我们想要的数组的形式
+        //     var d = c.map(item => {
+        //         return JSON.parse(item);
+        //     })
+        //     return d;}
+
+        //     console.log(unique(arr1));
+        //     console.log(unique(arr2));
+        //     console.log(unique(arr3));
+       
+          
+            
+
+</script>
+</body>
+</html>
