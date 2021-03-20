@@ -168,10 +168,17 @@ export default {
                     query.category3Id = category3id
                 }
                 location.query = query
+                
                 if(this.$route.params){
                     location.params = this.$route.params
                 }
-                this.$router.push(location)
+                //如果是往搜索页跳用replace
+                if(this.$route.path !== '/home'){
+                    this.$router.replace(location)
+                }else{
+                    this.$router.push(location)
+                }
+                //this.$router.push(location)
             }    
         },
         moveOutDiv(){

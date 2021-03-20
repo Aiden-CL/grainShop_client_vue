@@ -33,23 +33,28 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 根据数据的排序标志决定背景色在哪个动态绑定类 -->
+                <li :class="{active:orderFlag==='1'}">
+                  <a href="javascript:;" @click="changeOrder('1')">综合
+                    <i class="iconfont" v-if="orderFlag==='1'"
+                    :class="{
+                      iconup:orderType==='asc',
+                      icondown:orderType==='desc'
+                      }"
+                    ></i>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <!-- 字体图标 iconfont 哪个字体图标应该出现 出现字体图标 是向上还是向下 -->
+                <!--  -->
+                <li :class="{active:orderFlag==='2'}">
+                  <a href="javascript:;" @click="changeOrder('2')">价格
+                    <i class="iconfont" v-if="orderFlag==='2'"
+                    :class="{
+                      iconup:orderType==='asc',
+                      icondown:orderType==='desc'
+                      }"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -87,35 +92,18 @@
               
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- currentPageNo传递给分页组件的当前页码
+               total 总条数
+               pageSize 每页数量 后面计算总页数
+               continueNo 连续页数 代表三点之间有多少个按钮
+           -->
+          <Pagination 
+          :currentPageNo="searchParams.pageNo" 
+          :total="goodsListInfo.total"
+          :pageSize="searchParams.pageSize"
+          :continueNo="5"
+          @changePageNo="changePageNo"
+          ></Pagination>
         </div>
       </div>
     </div>
@@ -123,7 +111,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
   import SearchSelector from './SearchSelector/SearchSelector'
   export default {
     name: 'Search',
@@ -140,9 +128,11 @@
           props: [],
           trademark: "",
 
-          order: "1:desc",
+          order: "1:desc", //冒号前代表排序的标志 冒号后代表排序类型
+          //排序标志为1:按照综合排序 2:代表价格排序
+          //asc代表升序 desc代表降序
           pageNo: 1,
-          pageSize: 10,
+          pageSize: 3,
         }
       }
     },
@@ -168,6 +158,7 @@
       this.getGoodsListInfo()
     },
     methods: {
+      //第一次是按照三级分类和关键字搜索的
       getGoodsListInfo(){
         //dispatch在传参时只能传一个参数 如果是多个参数要传 也只能封装在同一个对象内去传
 
@@ -183,6 +174,7 @@
 
         //浅拷贝
         let obj = {
+          //在新对象中拆对象
           ...this.searchParams,
           categoryName,
           category1Id,
@@ -190,6 +182,13 @@
           category3Id,
           keyword
         }
+        //把对象中所有空串属性处理掉 否则这个数据也会传递"" 影响我们的带宽
+        Object.keys(obj).forEach((item)=>{
+          if(obj[item]===''){
+            delete obj[item]
+          }
+        })
+
         //之后发请求时就已经携带了参数
         this.searchParams = obj
       },
@@ -199,9 +198,9 @@
         //只会发请求 不会改变路径 导致数据是对的 路径是不对的
         // this.getGoodsListInfo()
 
-        
+        this.searchParams.pageNo = 1
         //从search再往search跳一次 只带原来的params参数 不带query参数
-        this.$router.push({
+        this.$router.replace({
           name:'search',
           params:this.$route.params
         })
@@ -214,17 +213,20 @@
 
         this.$bus.$emit('clearKeyword')
 
-        this.$router.push({
+        this.searchParams.pageNo = 1
+        this.$router.replace({
           name:'search',
           query:this.$route.query
         })
       },
       searchForTrademark(trademark){
         this.searchParams.trademark=`${trademark.tmId}:${trademark.tmName}`;
+        this.searchParams.pageNo = 1
         this.getGoodsListInfo()
       },
       removeTrademark(){
         this.searchParams.trademark = undefined;
+        this.searchParams.pageNo = 1
         this.getGoodsListInfo()
       },
       searchForAttrs(attrValue,attr){
@@ -232,10 +234,35 @@
         let isRepeat = this.searchParams.props.some((item)=>item === prop)
         if(isRepeat) return 
         this.searchParams.props.push(prop)
+        this.searchParams.pageNo = 1
         this.getGoodsListInfo()
       },
       removeAttr(index){
         this.searchParams.props.splice(index,1)
+        this.searchParams.pageNo = 1
+        this.getGoodsListInfo()
+      },
+      //点击综合或价格排序
+      changeOrder(orderFlag){
+        //先获取原来的排序标志和排序类型
+        let originFlag = this.orderFlag
+        let originType = this.orderType
+        let newOrder = ''
+        //判断这一次点击的标志和原来的是不是一样
+        if(orderFlag === originFlag){
+          //代表点的是一样的
+          newOrder = `${orderFlag}:${originType==='asc'?'desc':'asc'}`
+        }else{
+          //切换点击 给一个默认排序
+          newOrder = `${orderFlag}:desc`
+        }
+        this.searchParams.order = newOrder;
+        this.searchParams.pageNo = 1
+        this.getGoodsListInfo()
+      },
+      //点击分页器里的页码和上一页下一页重新发送请求
+      changePageNo(page){
+        this.searchParams.pageNo = page
         this.getGoodsListInfo()
       }
 
@@ -246,7 +273,8 @@
           this.handlerSearchParams()
           this.getGoodsListInfo();
         }
-      }
+      },
+      
     },
     components: {
       SearchSelector
@@ -254,7 +282,17 @@
     //初始阶段映射出的是undefined 所以需要||[]
     //拿到的是初始化state里的数据
     computed:{
-      ...mapGetters(['goodsList'])
+      ...mapGetters(['goodsList']),
+      ...mapState({
+        goodsListInfo:state=>state.search.goodsListInfo
+
+      }),
+      orderFlag(){
+        return this.searchParams.order.split(':')[0]
+      },
+      orderType(){
+        return this.searchParams.order.split(':')[1]
+      }
     }
   }
 </script>
