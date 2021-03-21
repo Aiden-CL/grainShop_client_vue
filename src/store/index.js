@@ -5,6 +5,8 @@ import Vuex from 'vuex'
 import home from './home'
 import user from './user'
 import search from './search'
+import detail from './detail'
+import shopcart from './shopcart'
 vue.use(Vuex) //引入并声明使用 -> 官方插件需要做的
 const state = {
 
@@ -36,7 +38,9 @@ const store = new Vuex.Store({
     modules: {
         home,
         user,
-        search
+        search,
+        detail,
+        shopcart
     }
 }) 
 export default store

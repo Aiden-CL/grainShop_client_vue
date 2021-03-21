@@ -41,3 +41,20 @@ export const reqGoodsListInfo=(searchParams)=>{
     })
 }
 //reqGoodsListInfo({})//不能不传 需要传一个空对象 后期需要初始化参数
+//请求获取商品详情数据
+// /api/item/{skuId}
+export const reqGoodsDetailInfo=(skuId) => {
+    return Ajax({
+        url: `/item/${skuId}`,
+        method:'get'
+
+    })
+}
+//请求添加购物车 或者修改购物车的数据
+// /api/cart/addToCart/{ skuId }/{ skuNum }
+export const reqAddOrUpdateShopCart=(skuId,skuNum) => {
+    return Ajax({
+        url: `/cart/addToCart/${skuId}/${skuNum}`,
+        method:'post'
+    })
+}

@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from '@/router/index'
 //import { reqCategoryList } from '@/api'
 //import { reqGoodsListInfo } from '@/api'
+import {reqGoodsDetailInfo} from '@/api'
 import store from '@/store'
 import '@/mock/mockServer' //引入mock模拟接口
 import 'swiper/css/swiper.css'
@@ -28,3 +29,5 @@ new Vue({
   router, //每个组件内部都能通过this.$router获取到路由器对象 通过this.$route获取到当前路由对象
   store
 }).$mount('#app')
+
+reqGoodsDetailInfo()
