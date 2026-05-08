@@ -1,18 +1,23 @@
-//发送到本地
-
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
 
 const service = axios.create({
     baseURL: '/mock',
-    timeout:2000
-});
+    timeout: 10000
+})
+
 service.interceptors.request.use(
     (config) => {
-        NProgress.start() 
-        return config 
-})
+        NProgress.start()
+        return config
+    },
+    (error) => {
+        NProgress.done()
+        return Promise.reject(error)
+    }
+)
+
 service.interceptors.response.use(
     (response) => {
         NProgress.done()
@@ -20,8 +25,9 @@ service.interceptors.response.use(
     },
     (error) => {
         NProgress.done()
-        alert('ajax failed' + error.message || 'unknow')
-        return new Promise(()=>{}) 
+        console.error('Mock request failed:', error.message || 'unknown error')
+        return new Promise(() => {})
     }
 )
+
 export default service

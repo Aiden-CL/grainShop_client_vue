@@ -40,7 +40,6 @@
   export default {
     name: 'SearchSelector',
     methods:{
-      //子向父传递 自定义事件
       searchForTrademark(trademark){
         this.$emit('searchForTrademark',trademark)
       },

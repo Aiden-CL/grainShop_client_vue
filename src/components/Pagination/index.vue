@@ -1,19 +1,14 @@
 <template>
   <div class="pagination">
-    <!-- 当前页为第一页时 禁用 -->
     <button @click="$emit('changePageNo',currentPageNo-1)" :disabled="currentPageNo===1">上一页</button>
-    <!-- 当连续页的起始位置是1 这个1 就要删掉 否则就有两个1  -->
     <button v-if="startEnd.start !== 1" @click="$emit('changePageNo',1)">1</button>
     <button v-if="startEnd.start>2">···</button>
-
-    <!-- v-for和v-if同时使用 v-for优先级比v-if高 -->
-    <!-- 当前页一定在遍历的page里 -->
-    <button :class="{active:currentPageNo===page}"
-    v-for="page in startEnd.end" :key="page"
-    v-if="page>=startEnd.start" @click="$emit('changePageNo',page)">
-    {{page}}</button>
- 
-    
+    <template v-for="page in startEnd.end">
+      <button :class="{active:currentPageNo===page}"
+      :key="page"
+      v-if="page>=startEnd.start" @click="$emit('changePageNo',page)">
+      {{page}}</button>
+    </template>
     <button v-if="startEnd.end<totalPageNo-1">···</button>
     <button v-if="startEnd.end !== totalPageNo" @click="$emit('changePageNo',totalPageNo)">{{totalPageNo}}</button>
     <button @click="$emit('changePageNo',currentPageNo+1)" :disabled="currentPageNo===totalPageNo">下一页</button>
@@ -44,11 +39,9 @@
         }
     },
     computed:{
-        //计算总页数
         totalPageNo(){
             return Math.ceil(this.total/this.pageSize)
         },
-        //计算连续页的起始位置和结束位置
         startEnd(){
             let start = 0
             let end = 0
@@ -59,7 +52,6 @@
             }else{
                 start = currentPageNo - Math.floor(continueNo/2)
                 end = currentPageNo + Math.floor(continueNo/2)
-                //当前页在左侧 判断start
                 if(start<=1){
                     start =1 
                     end = continueNo
@@ -71,11 +63,8 @@
             }
             return {start,end}
         }
-            
     }
 }
-    
-
 </script>
 
 <style lang="less" scoped>

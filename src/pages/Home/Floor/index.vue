@@ -69,65 +69,9 @@
 </template>
 
 <script>
-import Swiper from 'swiper/js/swiper'
-import 'swiper/css/swiper.css'
 export default {
     name:'Floor',
-    props:['floor'],//相当于data当中的数据
-    //第二种写法
-    // props:{
-    //     floor:Object
-    // }
-    //第三种写法
-    // props:{
-    //     floor:{
-    //         type:Object,
-    //         required:true
-    //     }
-    // }
-    mounted(){
-        //在banner中的mounted直接实例化swiper是不行的 在这里可以
-        //因为在banner中 结构是需要等待请求回来的数据 然后才能根据动态数据创建div
-        //在banner的mounted内部实例化swiper之前 结构肯定是不能完成的
-
-        //floor中可以 因为floor组件内部数据早已请求回来 当作静态数据对待
-        //在new时 结构已经完全形成 所以就是可以的
-        // new Swiper (this.$refs.floor1Swiper, {
-        //     loop: true,
-        //     pagination: {
-        //         el: '.swiper-pagination',
-        //     },
-        //     navigation: {
-        //         nextEl: '.swiper-button-next',
-        //         prevEl: '.swiper-button-prev',
-        //     },
-        //     scrollbar: {
-        //         el: '.swiper-scrollbar',
-        //     },
-        // }) 
-    },
-    // watch:{
-    //     floor:{
-    //         immediate:true,//不管数据有没有变化都立即执行handler
-    //         handler(newVal,oldVal){
-    //             this.$nextTick(()=>{
-    //                 new Swiper (this.$refs.floor1Swiper, {
-    //                     loop: true,
-    //                     pagination: {
-    //                         el: '.swiper-pagination',
-    //                     },
-    //                     navigation: {
-    //                         nextEl: '.swiper-button-next',
-    //                         prevEl: '.swiper-button-prev',
-    //                     },
-    //                     scrollbar: {
-    //                         el: '.swiper-scrollbar',
-    //                     },
-    //                 }) 
-    //             })
-    //         }
-    //     }
-    // }
+    props:['floor']
 }
 </script>
 

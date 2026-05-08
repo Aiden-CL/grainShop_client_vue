@@ -17,21 +17,6 @@
                                     <a href="javascript:;" 
                                     :data-categoryName="c1.categoryName" 
                                     :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
-                                    <!-- <router-link 
-                                    :to="{
-                                        name:'search',
-                                        query:{
-                                            categoryName:c1.categoryName,
-                                            category1Id:c1.categoryId
-                                            }}">{{c1.categoryName}}</router-link> -->
-                                    <!-- <a href="javascript:;" @click="$router.push(
-                                        {
-                                        name:'search',
-                                        query:{
-                                            categoryName:c1.categoryName,
-                                            category1Id:c1.categoryId
-                                            }}
-                                    )">{{c1.categoryName}}</a> -->
                                 </h3>
                                 <div class="item-list clearfix">
                                     <div class="subitem">
@@ -40,21 +25,6 @@
                                                 <a href="javascript:;" 
                                                 :data-categoryName="c2.categoryName" 
                                                 :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
-                                                <!-- <router-link :to="{
-                                                    name:'search',
-                                                    query:{
-                                                        categoryName:c2.categoryName,
-                                                        category2Id:c2.categoryId
-                                                        }
-                                                }">{{c2.categoryName}}</router-link> -->
-                                                <!-- <a href="javascript:;" @click="$router.push(
-                                                    {
-                                                    name:'search',
-                                                    query:{
-                                                        categoryName:c2.categoryName,
-                                                        category2Id:c2.categoryId
-                                                        }}
-                                                )">{{c2.categoryName}}</a> -->
                                             </dt>
                                             <dd>
                                                 <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
@@ -62,21 +32,6 @@
                                                     :data-categoryName="c3.categoryName" 
                                                     :data-category3Id="c3.categoryId"
                                                     >{{c3.categoryName}}</a>
-                                                    <!-- <router-link :to="{
-                                                    name:'search',
-                                                    query:{
-                                                        categoryName:c3.categoryName,
-                                                        category3Id:c3.categoryId
-                                                        }
-                                                }">{{c3.categoryName}}</router-link> -->
-                                                <!-- <a href="javascript:;" @click="$router.push(
-                                                    {
-                                                    name:'search',
-                                                    query:{
-                                                        categoryName:c3.categoryName,
-                                                        category3Id:c3.categoryId
-                                                        }}
-                                                )">{{c3.categoryName}}</a> -->
                                                 </em>
                                                 
                                             </dd>
@@ -109,7 +64,6 @@
 
 <script>
 import { mapState } from 'vuex'
-//import _ from 'lodash'
 import throttle from 'lodash/throttle.js'
 export default {
     name:'TypeNav',
@@ -123,37 +77,21 @@ export default {
         if(this.$route.path!=='/home'){
             this.isShow = false
         }
-        //打开action的开关 才会触发store的action去发请求
-
-        //home和search切换时 会重复发请求
-        //this.$store.dispatch('getCategoryList')//此为异步操作
-        //dispatch之后 会调用action里的函数发请求 数据是存储在vuex中
     },
-    //从vuex中把需要的数据 映射到vue中
     computed:{
         ...mapState({
-            //映射的名称必须和state当中的数据名称一致
             categoryList:state=>state.home.categoryList
         })
     },
     methods:{
         moveInDiv:throttle(function(index){
-            console.log(index);
             this.currentIndex = index
         },50,{trailing:false}),
-        //点击三级分类跳转 事件委托
         toSearch(event){
-            //时间委派的回调函数
-            //1.用户点击的是不是a
-            //2.每个a标签传递的参数是不一样的
-            let target = event.target; //点击的元素是target
+            let target = event.target;
             let dataset = target.dataset;
-            //console.log(dataset);
-            //判断
             let {categoryname,category1id,category2id,category3id} = dataset;
-            //categoryname存在 肯定为a标签
             if(categoryname){
-                //判定点击的一定是a标签 因为categoryname在data-自定义属性了
                 let location ={
                     name:'search',
                 }
@@ -172,13 +110,11 @@ export default {
                 if(this.$route.params){
                     location.params = this.$route.params
                 }
-                //如果是往搜索页跳用replace
                 if(this.$route.path !== '/home'){
                     this.$router.replace(location)
                 }else{
                     this.$router.push(location)
                 }
-                //this.$router.push(location)
             }    
         },
         moveOutDiv(){

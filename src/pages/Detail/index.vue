@@ -358,7 +358,6 @@ import { mapGetters } from 'vuex'
         skuNum: 1
       }
     },
-    //把路由传递过来的参数给处理一下 存储在data中 后期使用会方便
     beforeMount() {
       this.skuId = this.$route.params.goodsId
     },
@@ -368,50 +367,26 @@ import { mapGetters } from 'vuex'
     
     methods:{
       getGoodsDetailInfo(){
-        //根据路由传参传过来了id
         this.$store.dispatch('getGoodsDetailInfo', this.skuId)
       },
-      //点击销售属性值修改选中的高亮(绿色框)
       changeChecked(spuSaleAttrValueList,spuSaleAttrValue){
         spuSaleAttrValueList.forEach((item)=>{
           item.isChecked = '0'
         })
         spuSaleAttrValue.isChecked = '1'
       },
-      //*****************************
-      //之前是直接跳转 之前跳转没有修改后端数据库的内容
-      //添加购物车 首先得请求后端修改数据库得数据 修改成功后 后端会给我们返回消息
-      //根据后端返回的消息是成功还是失败决定要不要跳转到添加购物车成功得页面
-
       async addCart(){
-        //为shopcart.js的返回值 为Promise
         try {
-          //请求添加购物车成功
           await this.$store.dispatch('getAddOrUpdateShopCart',{skuId:this.skuId,skuNum:this.skuNum})
-          //console.log(result);
-          alert('添加购物车成功准备跳转到添加购物车成功页面')
-          //跳转到添加购物车成功页面需要带过去两个数据 商品数量 商品详情
-          //商品数量->路由传参  
-          //商品详情是一个复杂数据 一般不会路由传递复杂数据 采用存储方案localStorage 和 sessionStorage
-
-          //不能直接传对象 只能传字符串
           sessionStorage.setItem('SKUINFO_KEY',JSON.stringify(this.skuInfo))
-
           this.$router.push('/addcartsuccess?skuNum='+this.skuNum)
         } catch (error) {
-          //请求添加购物车失败
-           alert(error.message+'失败')
+          console.error('添加购物车失败:', error.message)
         } 
       }
     },
     computed:{
-      //数据没回来之前 由于getters处理过 skuInfo是不可能出现undefined 最次是空对象
-      //可以保证skuInfo.xxx不会报错
       ...mapGetters(['categoryView','skuInfo','spuSaleAttrList']),
-      //imageList是通过skuInfo.skuImageList出现的 而skuInfo可能是空对象
-      //imageList很可能是undefined 
-      //因此必须对imageList进行计算处理 也是为了保证imageList不会是undefined 如果是undefined
-      //传递给zoom子组件 内部必定报错
       imageList(){
         return this.skuInfo.skuImageList || []
       }

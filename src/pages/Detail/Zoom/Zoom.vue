@@ -1,14 +1,6 @@
 <template>
   <div class="spec-preview">
-    <!-- 
-         本质：请求数据是异步操作
-         imageList 传过来是undefined
-         imageList[0] 传过来是undefined
-         解决方案：至少把imageList[0]变为空对象
-         {}.imgUrl => undefined但是不报错
-     -->
     <img :src="defaultImg.imgUrl" />
-    <!-- event承接移动事件 -->
     <div class="event" @mousemove="move"></div>
     <div class="big">
       <img :src="defaultImg.imgUrl" ref="bigImg"/>
@@ -27,10 +19,12 @@
       }
     },
     mounted(){
-      //on这边要写回调
       this.$bus.$on('changeBigDefaultIndex',index=>this.defaultIndex = index)
     },
-     methods:{
+    beforeDestroy(){
+      this.$bus.$off('changeBigDefaultIndex')
+    },
+    methods:{
       move(event){
         let mask = this.$refs.mask
         let bigImg = this.$refs.bigImg
@@ -59,17 +53,13 @@
     },
     computed:{
       defaultImg(){
-        //imageList是空数组 而空数组[xxx]又是undefined 所以还要对空数组进行处理
-        //保证[xxx]出来的不是undefined 最次是一个空对象
         return this.imageList[this.defaultIndex]||{}
       }
-    },
-   
-
+    }
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .spec-preview {
     position: relative;
     width: 400px;
